@@ -25,16 +25,68 @@ typedef enum {
 TOKEN scanner(void); // el scanner
 int columna(int c);
 int estadoFinal(int e);
+void reconocerTokens(void);
+char* getTokenName(int);
 
+
+int car;
 
 int main(int argc, const char * argv[]) {
     if ( (in = fopen("/Users/mberenson/Development/UTN/SSL/UTN-SSL/Scanner_TP/tp_scanner/tp_scanner/tokens.txt", "r") ) == NULL ) {
         printf("No se pudo abrir archivo fuente\n");
         return -1;//no pudo abrir archivo
     } else {
-        printf("%u", scanner());
+        
+        reconocerTokens();
     }
     return 0;
+}
+
+void reconocerTokens()
+{
+    int token;
+    int contador = 1;
+    printf("%d. ", contador);
+    while ((token = scanner()) != FDT) {
+        
+        if (token == ERRORLEXICO && car == '|')
+        {
+            contador++;
+            printf("\n %d.", contador);
+        }
+        else if (token == FDT)
+        {
+            printf("\n");
+        }
+        else
+        {
+            printf(" %s ",getTokenName(token));
+        }
+        
+    }
+}
+
+char* getTokenName(int token)
+{
+//    typedef enum {
+//        INICIO -> 0 , FIN -> 1, LEER -> 2, ESCRIBIR -> 3, ID -> 4, CONSTANTE -> 5, PARENIZQUIERDO-> 6, PARENDERECHO-> 7, PUNTOYCOMA -> 8,
+//        COMA -> 9 , ASIGNACION -> 10 , SUMA -> 11, RESTA -> 12, FDT -> 13, ERRORLEXICO -> 14
+//    } TOKEN;
+    switch ( token )
+    {
+        case 4 : return "IDENTIFICADOR";
+        case 5 : return "CONSTANTE";
+        case 11 : return "SUMA";
+        case 12 : return "RESTA";
+        case 6 : return "PARENTESIS_IZQUIERDO";
+        case 7 : return "PARENTESIS_DERECHO";
+        case 9 : return "COMA";
+        case 8 : return "PUNTO_Y_COMA";
+        case 10 : return "ASIGNACION";
+        case 13 : return "EOF";
+        case 14 : return "ERROR_LEXICO";
+        default: return "";
+    }
 }
 
 
@@ -42,7 +94,7 @@ TOKEN scanner()
 {
     int tabla[NUMESTADOS][NUMCOLS] =
                    //L  D   +   -   (   )   ,    ;   :   =  EOF ´´ OTRO
-        /*0     */{{ 1, 3 , 5 , 6 , 7 , 8 , 9 , 10, 11, 14, 13, 0, 14 },
+        /*0     */{{ 1, 3 , 5 , 6 , 7 , 8 , 9 , 10, 11, 12, 13, 0, 14 },
         /*1      */{ 1, 1 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 },
         /*2 ID   */{ 14, 14, 14, 14, 14, 14, 14, 14, 14 , 14, 14, 14, 14 },
         /*3      */{ 4, 3 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4, 4, 4, 4 },
@@ -57,7 +109,7 @@ TOKEN scanner()
         /*12 ASIG*/{ 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14 },
         /*13 fdt */{ 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14 },
         /*14 Err */{ 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14 } };
-    int car;
+
     int col;
     int estado = 0;
     int i = 0;
