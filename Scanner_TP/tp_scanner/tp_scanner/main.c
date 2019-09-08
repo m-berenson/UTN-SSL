@@ -28,8 +28,12 @@ int estadoFinal(int e);
 
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    printf("Hello, World!\n");
+    if ( (in = fopen("/Users/mberenson/Development/UTN/SSL/UTN-SSL/Scanner_TP/tp_scanner/tp_scanner/tokens.txt", "r") ) == NULL ) {
+        printf("No se pudo abrir archivo fuente\n");
+        return -1;//no pudo abrir archivo
+    } else {
+        printf("%u", scanner());
+    }
     return 0;
 }
 
