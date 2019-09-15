@@ -32,11 +32,12 @@ char* getTokenName(int);
 int car;
 
 int main(int argc, const char * argv[]) {
-    if ( (in = fopen("/Users/mberenson/Development/UTN/SSL/UTN-SSL/Scanner_TP/tp_scanner/tp_scanner/tokens.txt", "r") ) == NULL ) {
-        printf("No se pudo abrir archivo fuente\n");
-        return -1;//no pudo abrir archivo
+    
+    if ( (in = fopen("tokens.txt", "r") ) == NULL ) {
+        printf("No se pudo abrir el archivo archivo\n");
+        return -1;
     } else {
-        
+        printf("%s\n\n", "El archivo debe contener palabras separadas por un | (pipe) para que el autómata las reconozca.");
         reconocerTokens();
     }
     return 0;
